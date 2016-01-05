@@ -91,7 +91,7 @@ public class Turtles extends JavaPlugin implements Listener {
         Turtle turtle = repository.getTurtle(location.getBlockX(), location.getBlockY(), location.getBlockZ());
         if (turtle != null) {
             e.setCancelled(true);
-            if(!turtle.getOwner().equals(e.getPlayer()) && !e.getPlayer().hasPermission("turtle.destroy.others")) return;
+            if(!turtle.getOwner().equals(e.getPlayer().getUniqueId()) && !e.getPlayer().hasPermission("turtle.destroy.others")) return;
             try{
                 turtle.parser.timer.cancel();
             }catch(NullPointerException ex){}
@@ -116,7 +116,7 @@ public class Turtles extends JavaPlugin implements Listener {
         Location location;
         Turtle turtle;
         if (e.getClickedBlock() != null && e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getItem() == null && (turtle = repository.getTurtle((location = e.getClickedBlock().getLocation()).getBlockX(), location.getBlockY(), location.getBlockZ())) != null) {
-            if(!turtle.getOwner().equals(e.getPlayer()) && !e.getPlayer().hasPermission("turtle.inventory.others")) return;
+            if(!turtle.getOwner().equals(e.getPlayer().getUniqueId()) && !e.getPlayer().hasPermission("turtle.inventory.others")) return;
             e.getPlayer().openInventory(turtle.getInventory());
         }
     }
