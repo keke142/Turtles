@@ -18,11 +18,13 @@ public class Executer {
     private int lineNumber = 0;
     private Executer parser;
     public Timer timer;
+    private int speed;
 
     public Executer(JavaPlugin plugin, World world, Turtle turtle) {
         this.plugin = plugin;
         this.world = world;
         this.turtle = turtle;
+        this.speed = 1;
     }
 
     public void parse(){
@@ -39,7 +41,7 @@ public class Executer {
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() { execute(); }
-        }, 0, 1000);
+        }, 0, 1000/speed);
         
         this.lineNumber = 0;
     }
@@ -61,7 +63,7 @@ public class Executer {
             public void run() {
                 execute();
             }
-        }, 0, 1000);
+        }, 0, 1000/speed);
     }
     
     public void execute(){
@@ -119,6 +121,14 @@ public class Executer {
 
     public String getScript() {
         return this.turtle.getScript();
+    }
+    
+    public int getSpeed(){
+        return this.speed;
+    }
+    
+    public void setSpeed(int speed){
+        this.speed = speed;
     }
 
 }
