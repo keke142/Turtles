@@ -39,19 +39,30 @@ public class Turtles extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        new Thread(new Runnable() {
+            public void run() {
+                enable();
+            }
+        }).start();
+    }
+    
+    public void enable(){
         repository = new TurtleRepositoryWorld();
         storage = new StorageJson(repository, new File("turtles.json"));
+        
         blockTurtle = ItemStackBuilder.start().setName("§9Turtle").setType(Material.SKULL).get();
         itemTurtle = ItemStackBuilder.start().setName("§9Turtle").setType(Material.SKULL_ITEM).get();
+        
         recipeTurtle = new ShapedRecipe(itemTurtle);
         recipeTurtle.shape(new String[]{"sns", "srs", "scs"}).setIngredient('s', Material.STONE).setIngredient('n', Material.NETHER_STAR).setIngredient('r', Material.REDSTONE_BLOCK).setIngredient('c', Material.CHEST);
+        this.getServer().addRecipe(recipeTurtle);
+        
         try {
             storage.read();
         }
         catch (StorageException e) {
             this.getLogger().log(Level.SEVERE, "Could not read turtles to storage: {0}", e);
         }
-        this.getServer().addRecipe(recipeTurtle);
         this.getServer().getPluginManager().registerEvents((Listener)this, (Plugin)this);
         
         CommandResolver.commands.put("dig", new CommandDig());
@@ -65,7 +76,8 @@ public class Turtles extends JavaPlugin implements Listener {
         
         this.getLogger().info("Turtles is enabled.");
     }
-
+    
+    
     @Override
     public void onDisable() {
         try {
