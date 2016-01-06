@@ -19,11 +19,10 @@ public class Turtle {
     private int x;
     private int y;
     private int z;
-    private List<Command> commands = new ArrayList<Command>();
     private boolean busy;
     private UUID owner;
     private Inventory inventory;
-    private ITurtleRepository repository;
+    private final ITurtleRepository repository;
     public Executer parser;
 
     public Turtle(int x, int y, int z, UUID owner, Inventory inventory, ITurtleRepository repository) {
@@ -33,10 +32,6 @@ public class Turtle {
         this.owner = owner;
         this.inventory = inventory;
         this.repository = repository;
-    }
-
-    public void addCommand(Command command) {
-        this.commands.add(command);
     }
 
     public void setBusy(boolean busy) {
