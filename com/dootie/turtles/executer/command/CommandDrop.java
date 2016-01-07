@@ -1,6 +1,5 @@
 package com.dootie.turtles.executer.command;
 
-import com.dootie.turtles.executer.ParseException;
 import com.dootie.turtles.executer.Executer;
 import com.dootie.turtles.repository.Turtle;
 import org.bukkit.Location;

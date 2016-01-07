@@ -23,7 +23,7 @@ public class Turtle {
     private UUID owner;
     private Inventory inventory;
     private final ITurtleRepository repository;
-    public Executer parser;
+    public Executer executer;
 
     public Turtle(int x, int y, int z, UUID owner, Inventory inventory, ITurtleRepository repository) {
         this.x = x;
@@ -89,7 +89,7 @@ public class Turtle {
     public ItemStack getScriptSlot() {
         return this.inventory.getItem(0);
     }
-
+    
     public Location getLocation(World world) {
         return new Location(world, (double)this.x, (double)this.y, (double)this.z);
     }
@@ -107,17 +107,17 @@ public class Turtle {
                 script = script + newpage;
             }
         }
-        return script;
+        return script+"print §aTurtle finished the script.";
     }
 
-    public void sendMessageToOwner(String message) {
+    public void sendMessage(String message) {
         if (Bukkit.getPlayer((UUID)this.owner) != null) {
-            Bukkit.getPlayer((UUID)this.owner).sendMessage((Object)ChatColor.BOLD + "[Turtle]" + (Object)ChatColor.RESET + " [" + this.x + ", " + this.y + ", " + this.z + "] " + message);
+            Bukkit.getPlayer((UUID)this.owner).sendMessage(ChatColor.BOLD + "[Turtle]" + (Object)ChatColor.RESET + " [" + this.x + ", " + this.y + ", " + this.z + "] " + message);
         }
     }
-
-    public void sendErrorToOwner(String error) {
-        this.sendMessageToOwner((Object)ChatColor.RED + error);
+    
+    public void sendError(String error) {
+        this.sendMessage(ChatColor.RED + error);
     }
 }
 

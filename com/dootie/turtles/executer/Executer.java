@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -17,22 +18,23 @@ public class Executer {
     private int currentSelectedSlot = 0;
     private int lineNumber = 0;
     private Executer parser;
-    public Timer timer;
+    private Timer timer;
     private int speed;
+    private int nextLine;
 
     public Executer(JavaPlugin plugin, World world, Turtle turtle) {
         this.plugin = plugin;
         this.world = world;
         this.turtle = turtle;
         this.speed = 1;
+        this.nextLine = 0;
     }
 
     public void parse(){
-        turtle.parser = parser;
         this.lineNumber = 0;
         parser = this;
         
-        if (this.getScript() == null) ParseException.exception(turtle, "No script is found.");
+        if (this.getScript() == null) turtle.sendError("No script is found.");
             
         if (this.turtle.isBusy()) return;
         
@@ -46,28 +48,10 @@ public class Executer {
         this.lineNumber = 0;
     }
     
-    public void parse(int number){
-        turtle.parser = parser;
-        this.lineNumber = number;
-        
-        parser = this;
-        
-        if (this.getScript() == null) ParseException.exception(turtle, "No script is found.");
-            
-        if (this.turtle.isBusy()) return;
-        
-        this.turtle.setBusy(true);
-        
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            public void run() {
-                execute();
-            }
-        }, 0, 1000/speed);
-    }
-    
     public void execute(){
         try{
+            nextLine = 0;
+            
             String[] lines = turtle.getScript().split(";");
 
             String line = lines[lineNumber];
@@ -76,22 +60,31 @@ public class Executer {
 
             Command command = new CommandResolver(parts[0], Arrays.copyOfRange(parts, 1, parts.length)).resolve(parser);
 
-            if (command != null) command.execute(parser, Arrays.copyOfRange(parts, 1, parts.length));
-            else{
+            if (command != null){
+                command.execute(parser, Arrays.copyOfRange(parts, 1, parts.length));
+            }else{
                 Executer.this.turtle.setBusy(false);
-                    ParseException.exception(turtle, "Command not found: " + parts[0] + ".");
+                    turtle.sendError("Command not found: " + parts[0] + ".");
                     Executer.this.turtle.setBusy(false);
-                    timer.cancel();
+                    stop();
             }
 
-            if(lineNumber < lines.length-1) lineNumber++;
-            else{
+            if(lineNumber < lines.length-1){
+                if(nextLine == 0) lineNumber++;
+                else lineNumber = nextLine-1;
+            }else{
                 Executer.this.turtle.setBusy(false);
-                timer.cancel();
+                stop();
             }
         }catch(IndexOutOfBoundsException ex){
             Bukkit.getServer().getPlayer(turtle.getOwner()).sendMessage("Error in the script. Missing ';'");
-            timer.cancel(); 
+            Executer.this.turtle.setBusy(false);
+            stop();
+        }
+        
+        if(turtle.getLocation(world).getBlock().getType() != Material.SKULL){
+            turtle.setBusy(false);
+            stop();
         }
     }
 
@@ -104,7 +97,7 @@ public class Executer {
     }
 
     public void setLineNumber(int line) {
-        this.lineNumber = line;
+        this.nextLine = line+1;
     }
 
     public int getLineNumber() {
@@ -129,6 +122,11 @@ public class Executer {
     
     public void setSpeed(int speed){
         this.speed = speed;
+    }
+    
+    public void stop(){
+        turtle.sendError("Turtle stopped the script.");
+        timer.cancel();
     }
 
 }

@@ -1,6 +1,5 @@
 package com.dootie.turtles.executer.command;
 
-import com.dootie.turtles.executer.ParseException;
 import com.dootie.turtles.executer.Executer;
 import com.dootie.turtles.util.DirectionHelper;
 import java.util.HashMap;
@@ -24,7 +23,7 @@ extends Command {
         }
         String direction = this.arguments[0];
         if (!DirectionHelper.isValidDirection(direction)) {
-            ParseException.exception(parser.getTurtle(),"Invalid direction given: " + direction + ".");
+            parser.getTurtle().sendError("Invalid direction given: " + direction + ".");
         }
         int[] coordinates = DirectionHelper.getCoordinates(direction, this.parser.getTurtle().getX(), this.parser.getTurtle().getY(), this.parser.getTurtle().getZ());
         for (Entity e : this.parser.getWorld().getEntities()) {

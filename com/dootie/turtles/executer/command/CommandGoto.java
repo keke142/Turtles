@@ -13,7 +13,7 @@ extends Command {
         this.parser = parser;
         this.arguments = arguments;
         if (this.arguments.length == 1) {
-            parser.parse(Integer.parseInt(arguments[0]));
+            parser.setLineNumber(Integer.parseInt(arguments[0]));
         }
     }
 }

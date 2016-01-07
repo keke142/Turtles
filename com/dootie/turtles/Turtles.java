@@ -73,6 +73,7 @@ public class Turtles extends JavaPlugin implements Listener {
         CommandResolver.commands.put("select", new CommandSelect());
         CommandResolver.commands.put("suck", new CommandSuck());
         CommandResolver.commands.put("goto", new CommandGoto());
+        CommandResolver.commands.put("#", new CommandComment());
         
         this.getLogger().info("Turtles is enabled.");
     }
@@ -105,7 +106,7 @@ public class Turtles extends JavaPlugin implements Listener {
             e.setCancelled(true);
             if(!turtle.getOwner().equals(e.getPlayer().getUniqueId()) && !e.getPlayer().hasPermission("turtle.destroy.others")) return;
             try{
-                turtle.parser.timer.cancel();
+                turtle.executer.stop();
             }catch(NullPointerException ex){}
             repository.removeTurtle(turtle.getX(), turtle.getY(), turtle.getZ());
             World world = e.getBlock().getWorld();

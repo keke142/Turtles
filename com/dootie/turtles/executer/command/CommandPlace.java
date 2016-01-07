@@ -1,6 +1,5 @@
 package com.dootie.turtles.executer.command;
 
-import com.dootie.turtles.executer.ParseException;
 import com.dootie.turtles.executer.Executer;
 import com.dootie.turtles.repository.Turtle;
 import com.dootie.turtles.util.DirectionHelper;
@@ -28,7 +27,7 @@ extends Command {
         ItemStack stack = this.parser.getTurtle().getInventory().getItem(this.parser.getCurrentSelectedSlot());
         String direction = this.arguments[0];
         if (!DirectionHelper.isValidDirection(direction)) {
-            ParseException.exception(parser.getTurtle(),"Invalid direction given: " + direction + ".");
+            parser.getTurtle().sendError("Invalid direction given: " + direction + ".");
         }
         int[] coordinates = DirectionHelper.getCoordinates(direction, turtle.getX(), turtle.getY(), turtle.getZ());
         Block block = this.parser.getWorld().getBlockAt(coordinates[0], coordinates[1], coordinates[2]);
