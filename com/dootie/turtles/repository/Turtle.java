@@ -2,10 +2,6 @@ package com.dootie.turtles.repository;
 
 import com.dootie.turtles.executer.Executer;
 import com.dootie.turtles.executer.PlaceholderResolver;
-import com.dootie.turtles.executer.command.Command;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -108,8 +104,9 @@ public class Turtle {
             script = script.replace("§"+Integer.toHexString(a), "");
         
         for(String placeholder: PlaceholderResolver.placeholders.keySet())
-            script = script.replace(placeholder, new PlaceholderResolver(placeholder).resolve().replace(this));
+            script = script.replace(placeholder, new PlaceholderResolver(placeholder).resolve().replace(this, placeholder));
         
+        script = script.replace("\n", "");
         return script+"print §aTurtle finished the script.";
     }
 

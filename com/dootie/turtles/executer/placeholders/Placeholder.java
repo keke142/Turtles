@@ -5,5 +5,5 @@ import com.dootie.turtles.repository.Turtle;
 
 public abstract class Placeholder {
 
-    public abstract String replace(Turtle turtle);
+    public abstract String replace(Turtle turtle, String placeholder);
 }
