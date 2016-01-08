@@ -1,9 +1,11 @@
 package com.dootie.turtles.repository;
 
 import com.dootie.turtles.executer.Executer;
+import com.dootie.turtles.executer.PlaceholderResolver;
 import com.dootie.turtles.executer.command.Command;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -99,14 +101,15 @@ public class Turtle {
         ItemStack itemStack = this.getScriptSlot();
         if (itemStack != null && itemStack.getType() == Material.BOOK_AND_QUILL) {
             BookMeta bookMeta = (BookMeta)itemStack.getItemMeta();
-            for (String page : bookMeta.getPages()) {
-                String newpage = page.replace("\n", "");
-                    for(int a = 0; a < 16;a++)
-                        newpage = newpage.replace("§"+Integer.toHexString(a), "");
-                    
-                script = script + newpage;
-            }
+            for (String page : bookMeta.getPages()) script = script + page;
         }
+        
+        for(int a = 0; a < 16;a++)
+            script = script.replace("§"+Integer.toHexString(a), "");
+        
+        for(String placeholder: PlaceholderResolver.placeholders.keySet())
+            script = script.replace(placeholder, new PlaceholderResolver(placeholder).resolve().replace(this));
+        
         return script+"print §aTurtle finished the script.";
     }
 

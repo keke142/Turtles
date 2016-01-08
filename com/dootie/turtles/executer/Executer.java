@@ -74,7 +74,7 @@ public class Executer {
                 else lineNumber = nextLine-1;
             }else{
                 Executer.this.turtle.setBusy(false);
-                stop();
+                timer.cancel();
             }
         }catch(IndexOutOfBoundsException ex){
             Bukkit.getServer().getPlayer(turtle.getOwner()).sendMessage("Error in the script. Missing ';'");
