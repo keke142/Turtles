@@ -77,6 +77,13 @@ public class Turtles extends JavaPlugin implements Listener {
         CommandResolver.commands.put("goto", new CommandGoto());
         CommandResolver.commands.put("#", new CommandComment());
         
+        PlaceholderResolver.placeholders.put("%block north type%", new BlockTypePlaceholder());
+        PlaceholderResolver.placeholders.put("%block east type%", new BlockTypePlaceholder());
+        PlaceholderResolver.placeholders.put("%block south type%", new BlockTypePlaceholder());
+        PlaceholderResolver.placeholders.put("%block west type%", new BlockTypePlaceholder());
+        PlaceholderResolver.placeholders.put("%block up type%", new BlockTypePlaceholder());
+        PlaceholderResolver.placeholders.put("%block down type%", new BlockTypePlaceholder());
+        
         this.getLogger().info("Turtles is enabled.");
     }
     

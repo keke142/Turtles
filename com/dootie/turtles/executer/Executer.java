@@ -28,6 +28,7 @@ public class Executer {
         this.turtle = turtle;
         this.speed = 1;
         this.nextLine = 0;
+        this.turtle.executer = this;
     }
 
     public void parse(){
@@ -53,11 +54,14 @@ public class Executer {
             nextLine = 0;
             
             String[] lines = turtle.getScript().split(";");
-
+            
             String line = lines[lineNumber];
-
+            
+            for(String placeholder: PlaceholderResolver.placeholders.keySet())
+                line = line.replace(placeholder, new PlaceholderResolver(placeholder).resolve().replace(turtle, placeholder));
+            
             String[] parts = line.split(" ");
-
+            
             Command command = new CommandResolver(parts[0], Arrays.copyOfRange(parts, 1, parts.length)).resolve(parser);
 
             if (command != null){

@@ -103,9 +103,6 @@ public class Turtle {
         for(int a = 0; a < 16;a++)
             script = script.replace("§"+Integer.toHexString(a), "");
         
-        for(String placeholder: PlaceholderResolver.placeholders.keySet())
-            script = script.replace(placeholder, new PlaceholderResolver(placeholder).resolve().replace(this, placeholder));
-        
         script = script.replace("\n", "");
         return script+"print §aTurtle finished the script.";
     }
