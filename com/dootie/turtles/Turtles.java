@@ -29,7 +29,6 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Turtles extends JavaPlugin implements Listener {
@@ -51,22 +50,39 @@ public class Turtles extends JavaPlugin implements Listener {
     public void enable(){
         repository = new TurtleRepositoryWorld();
         storage = new StorageJson(repository, new File("turtles.json"));
-        
         blockTurtle = ItemStackBuilder.start().setName("§9Turtle").setType(Material.SKULL).get();
         itemTurtle = ItemStackBuilder.start().setName("§9Turtle").setType(Material.SKULL_ITEM).get();
-        
         recipeTurtle = new ShapedRecipe(itemTurtle);
+        this.getServer().getPluginManager().registerEvents(this, this);
+        
+        addRecipes();
+        readStorage();
+        registerCommands();
+        registerPlaceholders();
+        
+        this.getLogger().info("[Turtles] Turtles is enabled.");
+    }
+    
+    private void addRecipes(){
+        System.out.println("[Turtles] Adding recipes...");
         recipeTurtle.shape(new String[]{"sns", "srs", "scs"}).setIngredient('s', Material.STONE).setIngredient('n', Material.NETHER_STAR).setIngredient('r', Material.REDSTONE_BLOCK).setIngredient('c', Material.CHEST);
         this.getServer().addRecipe(recipeTurtle);
-        
+        System.out.println("[Turtles] Added recipes.");
+    }
+    
+    private void readStorage(){
+        System.out.println("[Turtles] Loading turtles...");
         try {
             storage.read();
         }
         catch (StorageException e) {
             this.getLogger().log(Level.SEVERE, "Could not read turtles to storage: {0}", e);
         }
-        this.getServer().getPluginManager().registerEvents((Listener)this, (Plugin)this);
-        
+        System.out.println("[Turtles] Turtles loaded.");
+    }
+    
+    private void registerCommands(){
+        System.out.println("[Turtles] Registering commands...");
         CommandResolver.commands.put("dig", new CommandDig());
         CommandResolver.commands.put("drop", new CommandDrop());
         CommandResolver.commands.put("move", new CommandMove());
@@ -76,17 +92,27 @@ public class Turtles extends JavaPlugin implements Listener {
         CommandResolver.commands.put("suck", new CommandSuck());
         CommandResolver.commands.put("goto", new CommandGoto());
         CommandResolver.commands.put("#", new CommandComment());
-        
+        System.out.println("[Turtles] Commands registered.");
+    }
+    
+    private void registerPlaceholders(){
+        System.out.println("[Turtles] Registering placeholders...");
         PlaceholderResolver.placeholders.put("%block north type%", new BlockTypePlaceholder());
         PlaceholderResolver.placeholders.put("%block east type%", new BlockTypePlaceholder());
         PlaceholderResolver.placeholders.put("%block south type%", new BlockTypePlaceholder());
         PlaceholderResolver.placeholders.put("%block west type%", new BlockTypePlaceholder());
         PlaceholderResolver.placeholders.put("%block up type%", new BlockTypePlaceholder());
         PlaceholderResolver.placeholders.put("%block down type%", new BlockTypePlaceholder());
-        
-        this.getLogger().info("Turtles is enabled.");
+        PlaceholderResolver.placeholders.put("%owner name%", new OwnerPlaceholder());
+        PlaceholderResolver.placeholders.put("%owner uuid%", new OwnerPlaceholder());
+        for(int i = 0; i < 9; i++){
+            PlaceholderResolver.placeholders.put("%slot "+i+" type%", new OwnerPlaceholder());
+            PlaceholderResolver.placeholders.put("%slot "+i+" amount%", new OwnerPlaceholder());
+            PlaceholderResolver.placeholders.put("%slot "+i+" damage%", new OwnerPlaceholder());
+            PlaceholderResolver.placeholders.put("%slot "+i+" maxdamage%", new OwnerPlaceholder());
+        }
+        System.out.println("[Turtles] Placeholders registered.");
     }
-    
     
     @Override
     public void onDisable() {
