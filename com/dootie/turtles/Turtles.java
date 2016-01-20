@@ -14,11 +14,13 @@ import com.dootie.turtles.storage.StorageJson;
 import com.dootie.turtles.util.ItemStackBuilder;
 import java.io.File;
 import java.util.logging.Level;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -123,6 +125,19 @@ public class Turtles extends JavaPlugin implements Listener {
             this.getLogger().log(Level.SEVERE, "Could not save turtles to storage: {0}", e);
         }
     }
+    
+    @Override
+    public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args){
+        if (label.equals("turtles")){
+            sender.sendMessage("");
+            sender.sendMessage(ChatColor.DARK_PURPLE+"Turtles plugin by Dootie");
+            sender.sendMessage(ChatColor.BLUE+"Plugin avaiable in: "+ChatColor.GRAY+"https://www.spigotmc.org/resources/16666/");
+            sender.sendMessage(ChatColor.BLUE+"Github: "+ChatColor.GRAY+"https://github.com/Dootie/Turtles");
+            sender.sendMessage(ChatColor.BLUE+"Wiki: "+ChatColor.GRAY+"https://github.com/Dootie/Turtles/wiki");
+            sender.sendMessage(ChatColor.BLUE+"Twitter: "+ChatColor.GRAY+"https://twitter.com/Dootie_");
+        }
+        return true;
+    }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent e) {
@@ -185,5 +200,7 @@ public class Turtles extends JavaPlugin implements Listener {
             repository.removeTurtle(block.getX(), block.getY(), block.getZ());
         }
     }
+    
+    
 }
 

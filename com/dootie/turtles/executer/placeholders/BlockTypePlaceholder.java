@@ -26,5 +26,4 @@ public class BlockTypePlaceholder extends Placeholder{
         Block block = turtle.executer.getWorld().getBlockAt(coordinates[0], coordinates[1], coordinates[2]);
         return block.getType().toString();
     }
-    
 }
