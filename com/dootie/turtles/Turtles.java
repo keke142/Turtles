@@ -133,7 +133,7 @@ public class Turtles extends JavaPlugin implements Listener {
             sender.sendMessage(ChatColor.DARK_PURPLE+"Turtles plugin by Dootie");
             sender.sendMessage(ChatColor.BLUE+"Plugin avaiable in: "+ChatColor.GRAY+"https://www.spigotmc.org/resources/16666/");
             sender.sendMessage(ChatColor.BLUE+"Github: "+ChatColor.GRAY+"https://github.com/Dootie/Turtles");
-            sender.sendMessage(ChatColor.BLUE+"Wiki: "+ChatColor.GRAY+"https://github.com/Dootie/Turtles/wiki");
+            sender.sendMessage(ChatColor.BLUE+"Wiki: "+ChatColor.GRAY+"https://www.spigotmc.org/wiki/turtles/");
             sender.sendMessage(ChatColor.BLUE+"Twitter: "+ChatColor.GRAY+"https://twitter.com/Dootie_");
         }
         return true;
