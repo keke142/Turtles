@@ -1,6 +1,6 @@
 name: Turtles
 main: com.dootie.turtles.Turtles
-version: 1.7.1
+version: 1.8
 author: Dootie_
 description: Turtles!
 commands:

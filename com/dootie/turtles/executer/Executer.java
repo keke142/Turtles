@@ -1,11 +1,10 @@
 package com.dootie.turtles.executer;
 
 
+import com.dootie.turtles.Turtles;
 import com.dootie.turtles.executer.command.Command;
 import com.dootie.turtles.repository.Turtle;
 import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -14,16 +13,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Executer {
     private final World world;
     private final Turtle turtle;
-    private final JavaPlugin plugin;
     private int currentSelectedSlot = 0;
     private int lineNumber = 0;
     private Executer parser;
-    private Timer timer;
+    private int task;
     private int speed;
     private int nextLine;
 
     public Executer(JavaPlugin plugin, World world, Turtle turtle) {
-        this.plugin = plugin;
         this.world = world;
         this.turtle = turtle;
         this.speed = 1;
@@ -41,11 +38,10 @@ public class Executer {
         
         this.turtle.setBusy(true);
         
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        task = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Turtles.plugin, new Runnable() {
+            @Override
             public void run() { execute(); }
-        }, 0, 1000/speed);
-        
+        }, 0, 20/speed);
         this.lineNumber = 0;
     }
     
@@ -70,7 +66,7 @@ public class Executer {
                 Executer.this.turtle.setBusy(false);
                     turtle.sendError("Command not found: " + parts[0] + ".");
                     Executer.this.turtle.setBusy(false);
-                    stop();
+                    this.stop();
             }
 
             if(lineNumber < lines.length-1){
@@ -78,17 +74,17 @@ public class Executer {
                 else lineNumber = nextLine-1;
             }else{
                 Executer.this.turtle.setBusy(false);
-                timer.cancel();
+                Bukkit.getServer().getScheduler().cancelTask(task);
             }
         }catch(IndexOutOfBoundsException ex){
             Bukkit.getServer().getPlayer(turtle.getOwner()).sendMessage("Error in the script. Missing ';'");
             Executer.this.turtle.setBusy(false);
-            stop();
+            this.stop();
         }
         
         if(turtle.getLocation(world).getBlock().getType() != Material.SKULL){
             turtle.setBusy(false);
-            stop();
+            this.stop();
         }
     }
 
@@ -130,7 +126,7 @@ public class Executer {
     
     public void stop(){
         turtle.sendError("Turtle stopped the script.");
-        timer.cancel();
+        Bukkit.getServer().getScheduler().cancelTask(task);
     }
 
 }

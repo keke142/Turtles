@@ -113,8 +113,15 @@ public class Turtle {
         }
     }
     
+    public void sendInfo(String info) {
+        this.sendMessage(ChatColor.BLUE + info);
+    }
+    
+    public void sendSuccess(String success) {
+        this.sendMessage(ChatColor.GREEN + success);
+    }
+    
     public void sendError(String error) {
         this.sendMessage(ChatColor.RED + error);
     }
 }
-

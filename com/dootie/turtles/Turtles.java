@@ -31,9 +31,11 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Turtles extends JavaPlugin implements Listener {
+    public static Plugin plugin;
     public static ITurtleRepository repository;
     public static IStorage storage;
     public static ShapedRecipe recipeTurtle;
@@ -42,19 +44,16 @@ public class Turtles extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        new Thread(new Runnable() {
-            public void run() {
-                enable();
-            }
-        }).start();
+        this.enable();
     }
     
     public void enable(){
-        repository = new TurtleRepositoryWorld();
-        storage = new StorageJson(repository, new File("turtles.json"));
-        blockTurtle = ItemStackBuilder.start().setName("§9Turtle").setType(Material.SKULL).get();
-        itemTurtle = ItemStackBuilder.start().setName("§9Turtle").setType(Material.SKULL_ITEM).get();
-        recipeTurtle = new ShapedRecipe(itemTurtle);
+        Turtles.plugin = this;
+        Turtles.repository = new TurtleRepositoryWorld();
+        Turtles.storage = new StorageJson(repository, new File("turtles.json"));
+        Turtles.blockTurtle = ItemStackBuilder.start().setName("§9Turtle").setType(Material.SKULL).get();
+        Turtles.itemTurtle = ItemStackBuilder.start().setName("§9Turtle").setType(Material.SKULL_ITEM).get();
+        Turtles.recipeTurtle = new ShapedRecipe(itemTurtle);
         this.getServer().getPluginManager().registerEvents(this, this);
         
         addRecipes();
